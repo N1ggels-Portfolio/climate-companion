@@ -1,15 +1,15 @@
 <template>
   <main class="main">  
     <section class="section section__cards">
-      <div class="card card__location">
+      <div class="card card__location" v-if="locations.length" v-for="(item, index) in locations" :key="index">
         <div class="card__image"></div>
-        <div class="card__location-name" v-if="location">{{ location }}</div>
+        <div class="card__location-name" v-if="item.location">{{ item.location }}</div>
         <div class="card__content">
-          <div class="card__infos" v-if="info" v-for="item in info">
-            <div class="card__date">{{ formatDate(item.temp.date) }}</div>
-            <div class="card__temp">Temparatur: {{ item.temp.value }} °C</div>
-            <div class="card__precip">Niederschlag: {{ item.precip.value }} ml</div>
-            <div class="card__wind">Windgeschindigkeit: {{ item.wind.value }} m/s</div>
+          <div class="card__infos" v-for="info in item.info">
+            <div class="card__date">{{ formatDate(info.temp.date) }}</div>
+            <div class="card__temp">Temparatur: {{ info.temp.value }} °C</div>
+            <div class="card__precip">Niederschlag: {{ info.precip.value }} ml</div>
+            <div class="card__wind">Windgeschindigkeit: {{ info.wind.value }} m/s</div>
           </div>
         </div>
       </div>
@@ -33,27 +33,37 @@ import Modal from '../components/modal/new-location.vue';
 
 
 // Define reactive properties
-const location = ref('');
-const info = ref([]);
 const searchTerm = ref('');
+const locations = ref([]);
 
 let fetchedInfos;
 let isFetching = false;
 
+// Fetch the data when submitting a new location and save it to the database
 const handleInputSubmit = (value) => {
   if (!isFetching) {
     isFetching = true;
     searchTerm.value = value.value;
-    fetchData().finally(() => {
-      isFetching = false;
+    fetchData().then(data => {
+      saveLocation(data.location.value);
+      locations.value.push(data);
+      }).finally(() => {
+        isFetching = false;
     });
   }
 }
 
-const fetchData = async () => {
-  fetchedInfos = await getData(searchTerm);
-  location.value = fetchedInfos!.location.value;
-  info.value = fetchedInfos!.info.value;
+// Fetch the data for the location
+const fetchData = async (locationName) => {
+  if (locationName) {
+    fetchedInfos = await getData(locationName);
+  } else {
+    fetchedInfos = await getData(searchTerm);
+  }
+
+  // location.value = fetchedInfos!.location.value;
+  // info.value = fetchedInfos!.info.value;
+  return fetchedInfos;
 }
 
 function formatDate(dateString: string) {
@@ -70,6 +80,45 @@ function formatDate(dateString: string) {
   return `${day}.${month}.${date.getFullYear()} | ${hours}:${minutes}`;
 }
 
+// Parse data to python for database
+async function saveLocation(name: string) {
+  const response = await fetch('http://127.0.0.1:5000/save_locations', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `name=${name}`,
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+}
+
+async function getSavedLocations() {
+  try {
+    const response = await fetch ('http://127.0.0.1:5000/get_locations');
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const data = await response.json();
+
+    const fetchDataPromises = data.map(async (item: any) => {
+      return await fetchData(item.name);
+    })
+
+    locations.value = await Promise.all(fetchDataPromises);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+onMounted(getSavedLocations);
+
+
+// Modal logic
 const isModalOpen = ref(false)
 
 const openModal = () => {
@@ -95,7 +144,7 @@ const openModal = () => {
     flex-wrap: nowrap;
     gap: 1rem;
 
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 }
 

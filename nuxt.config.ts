@@ -20,5 +20,16 @@ export default defineNuxtConfig({
   css: [
     '~/assets/scss/_main.scss',
     '~/assets/css/tailwind.css'
-  ]
+  ],
+  routeRules: {
+    '/api/**': {
+      proxy: {
+        to: 'http://127.0.0.1:5000/api/',
+      }
+    }
+  },
+  axios: {
+    proxy: true,
+    baseURL: '/'
+  }
 })
