@@ -105,6 +105,8 @@ async function getSavedLocations() {
     
     const data = await response.json();
 
+    if (!data.fetched) return;
+
     const fetchDataPromises = data.map(async (item: any) => {
       return await fetchData(item.name);
     })
@@ -134,6 +136,7 @@ const openModal = () => {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    align-items: center;
 }
 
 .section {
@@ -143,6 +146,8 @@ const openModal = () => {
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 1rem;
+    width: 100%;
+    max-width: 80vw;
 
     overflow-x: auto;
   }
@@ -152,6 +157,7 @@ const openModal = () => {
 
   padding: .5rem 1rem;
   width: 17rem;
+  min-width: 17rem;
   height: 20rem;
 
   color: $c-black;

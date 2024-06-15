@@ -31,6 +31,13 @@ def get_locations():
   locations = cur.fetchall()
   cur.close()
 
+  if not locations:
+    return jsonify(
+      {
+        'fetched': False,
+        'message': 'No locations found.'
+      }), 200
+
   locations_list = [{'id': loc[0], 'name': loc[1]} for loc in locations]
   return jsonify(locations_list)
 
