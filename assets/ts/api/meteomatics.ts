@@ -9,11 +9,13 @@ export async function getData(inputValue: Ref<string>) {
     const locationInfo = await getLocation(inputValue) as any; // Get location information
     const location = ref('');
     const info = ref([]);
-    
+
     if (locationInfo.components.city) {
       location.value = locationInfo.components.city;
     } else if (locationInfo.components.village) {
       location.value = locationInfo.components.village;
+    } else if (locationInfo.components.town) {
+      location.value = locationInfo.components.town;
     } else if (locationInfo.formatted) {
       location.value = locationInfo.formatted;
     }
@@ -51,8 +53,8 @@ export async function getData(inputValue: Ref<string>) {
     // Get the current date and time
     const now = new Date();
 
-    // Calculate the start time (last 3 hours)
-    const startTime = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    // Calculate the start time (last 0 hours)
+    const startTime = new Date(now.getTime() - 0 * 60 * 60 * 1000);
     // Format the start time
     const formattedStartTime = startTime.toISOString().slice(0, 19).replace('T', 'T') + 'Z';
 
