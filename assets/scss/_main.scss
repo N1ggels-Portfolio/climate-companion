@@ -1,4 +1,9 @@
 @import './variables/colors';
 @import './variables/includeFonts';
 @import './assets/preset';
-@import './components/cards'
+@import './components/cards';
+@import '../scss/components/weather/clear-sky';
+@import '../scss/components/weather/cloudy';
+@import '../scss/components/weather/partly-cloudy';
+@import '../scss/components/weather/rain';
+@import '../scss/components/weather/snow';

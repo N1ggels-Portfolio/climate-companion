@@ -1,0 +1,16 @@
+// Define a mixin for keyframes
+@mixin keyframes($name) {
+  @if $name != '' {
+    @keyframes #{$name} {
+      @content;
+    }
+  }
+}
+
+// Define a mixin for applying animations
+@mixin animation($name, $duration, $timing-function, $iterations) {
+  animation-name: $name;
+  animation-duration: $duration;
+  animation-timing-function: $timing-function;
+  animation-iteration-count: $iterations;
+}

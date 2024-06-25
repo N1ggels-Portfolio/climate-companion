@@ -3,29 +3,20 @@
     <section class="section section__cards">
       <div class="card card__location" v-if="locations.length" v-for="(item, index) in locations" :key="index">
         <div class="background" v-html="renderWeatherContainer(getWeatherConditionDescription(item.info[0].condition.value))"></div>
-        <Menu as="div" class="relative inline-block text-left" style="position: absolute; top: 1rem; right: 1rem; z-index: 1000; width: 20px; height: 20px; cursor: pointer;">
-          <div>
-            <MenuButton class="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-              <span class="sr-only">Open options</span>
-              <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
-            </MenuButton>
-          </div>
 
-          <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-            <MenuItems class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div class="py-1">
-                <MenuItem v-slot="{ active }">
-                  <button @click="deleteLocation(item.location)" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm inline-flex justify-between w-full']"><p>Delete Location</p><svg version="1.1" id="trashcan.svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64; fill: #868686; width: 1rem;" xml:space="preserve">
-        <path class="can st0" d="M32.1,18h22c1.4,0,1.8,0.5,1.7,1.9c-0.5,4.6-1,9.2-1.5,13.8c-0.5,4.5-0.9,8.9-1.4,13.4c-0.5,4.5-1,9.1-1.4,13.6c-0.1,0.6-0.1,1.2-0.2,1.7c0.1,0.7-0.4,1.4-1.2,1.5c-0.1,0-0.3,0-0.4,0c-6.1,0-12.1,0-18.2,0H14.6c-1.3,0-1.6-0.3-1.8-1.7c-0.5-4.5-1-9-1.4-13.5s-0.9-9-1.4-13.5C9.5,31.2,9,27.1,8.6,23c-0.1-1.1-0.2-2.2-0.3-3.3c-0.2-0.7,0.2-1.4,1-1.6c0.2,0,0.3-0.1,0.5,0c2.9,0,5.8,0,8.7,0L32.1,18L32.1,18L32.1,18z M18.5,41c0,4.5,0,8.9,0,13.4c0,0.3,0,0.6,0.1,0.8c0.2,0.9,1.1,1.5,2,1.4c1-0.2,1.7-1,1.6-2c0-1.5,0-3.1,0-4.6c0-7.4,0-14.8,0-22.3c0-0.5-0.1-1-0.4-1.4c-0.4-0.7-1.2-1-2-0.8c-0.8,0.3-1.4,1.1-1.3,1.9C18.5,32,18.5,36.5,18.5,41z M33.9,41c0-4.5,0-8.9,0-13.4c0.2-1-0.5-2-1.5-2.2c-1-0.2-2,0.5-2.2,1.5c0,0.2,0,0.4,0,0.6c0,8.9,0,17.8,0,26.7c-0.2,1,0.5,2,1.6,2.2c1,0.2,2-0.5,2.2-1.6c0-0.2,0-0.4,0-0.6C33.9,49.9,33.9,45.5,33.9,41L33.9,41z M45.4,41v-2.1c0-3.8,0-7.6,0-11.4c0.1-1-0.7-1.9-1.7-2s-1.9,0.7-2,1.7c0,0.1,0,0.2,0,0.3	c0,0.2,0,0.4,0,0.6c0,8.3,0,16.6,0,24.9c0,0.7,0,1.3,0,2c0.1,0.9,0.8,1.6,1.6,1.7c0.9,0.1,1.7-0.5,1.9-1.3c0.1-0.4,0.1-0.7,0.1-1.1	C45.4,49.7,45.4,45.4,45.4,41L45.4,41z"/>
-        <path class="lid st0" d="M32,15c-8,0-16,0-24,0c-1.8,0.1-3.4-1.2-3.6-3.1c-0.3-1.8,1-3.6,2.8-3.9C7.6,8,8,8,8.4,8c4.2,0,8.4,0,12.7,0c0.6,0.1,1.1-0.3,1.2-0.9c1.7-5.4,7.4-8.4,12.8-6.7c3.2,1,5.7,3.5,6.7,6.6c0.1,0.6,0.7,1.1,1.3,1c4.2,0,8.4,0,12.6,0c0.5,0,0.9,0,1.4,0.1c1.8,0.4,2.9,2.2,2.6,4c-0.2,1.7-1.7,3-3.4,2.9c-6.4,0-12.8,0-19.2,0L32,15L32,15z M32,8c2,0,4,0,6.1,0c0.9,0,1.1-0.3,0.6-1.1c-1.2-2.5-3.8-4.1-6.6-4.1c-2.8,0-5.4,1.6-6.7,4.1c-0.4,0.7-0.2,1,0.6,1C28,8,30,8,32,8z"/>
-        </svg></button>
-                </MenuItem>
-              </div>
-            </MenuItems>
-          </transition>
-        </Menu>
-        <div class="card__image"></div>
-        <div class="card__location-name" v-if="item.location">{{ item.location }}</div>
+        <CardMenu :location="item.location" @submit="deleteLocation(item.location)" />
+
+        <div class="card__location-info" v-if="item.location">
+          <div class="card__info--current">
+            <div class="info__temp">
+              {{ item.info[0].temp.value }}°C
+            </div>
+            <div class="info__condition">
+              {{ formatCondition(item.info[0].condition.value) }}
+            </div>
+          </div>
+          {{ item.location }}
+        </div>
         <div class="card__content">
           <div class="card__infos" v-for="info in item.info">
             <div class="card__date">{{ formatDate(info.temp.date) }}</div>
@@ -35,7 +26,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="card card--new" @click="openModal">
         <svg width="50" height="50" viewBox="0 0 50 50">
             <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke"/>
@@ -49,12 +40,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 import { getData } from '../assets/ts/api/meteomatics';
 import Modal from '../components/modal/new-location.vue';
+import CardMenu from '../components/card-menu.vue';
 import axios from 'axios';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 
 
 // Define reactive properties
@@ -199,7 +191,7 @@ function getWeatherConditionDescription(code: number): string {
   return isDaytime? condition['daytime'] : condition['nighttime'];
 }
 
-function renderWeatherContainer(conditionDescription) {
+function renderWeatherContainer(conditionDescription: string) {
   switch (conditionDescription) {
     case "clear-sky":
       return `
@@ -351,7 +343,26 @@ function renderWeatherContainer(conditionDescription) {
       </div>
       `;
     case "rain-shower":
-      return '<div class="weather-container rain-shower">...</div>';
+      return `
+        <div class="weather-container rain">
+          <div class="cloud-one">
+            <div class="circle c-one"></div>
+            <div class="circle c-two"></div>
+            <div class="circle c-three"></div>
+            <div class="circle c-four"></div>
+          </div>
+          <div class="cloud-two">
+            <div class="circle c-one"></div>
+            <div class="circle c-two"></div>
+            <div class="circle c-three"></div>
+          </div>
+          <div class="cloud-three">
+            <div class="circle c-one"></div>
+            <div class="circle c-two"></div>
+          </div>
+          <div class="droplet-container"></div>
+        </div>
+        `;
     case "snow-shower":
       return '<div class="weather-container snow-shower">...</div>';
     case "sleet-shower":
@@ -370,6 +381,140 @@ function renderWeatherContainer(conditionDescription) {
       return '<div class="weather-container sandstorm">...</div>';
     default:
       return '';
+  }
+}
+
+function formatCondition(condition: number): string {
+  if (condition > 16) {
+    condition = condition - 100;
+  }
+  switch (condition) {
+    case 1:
+      return 'Clear sky'
+    case 2:
+      return 'Light clouds'
+    case 3:
+      return 'Partly cloudy'
+    case 4:
+      return 'Cloudy'
+    case 5:
+      return 'Rain'
+    case 6:
+      return 'Sleet'
+    case 7:
+      return 'Snow'
+    case 8:
+      return 'Rain shower'
+    case 9:
+      return 'Snow shower'
+    case 10:
+      return 'Sleet shower'
+    case 11:
+      return 'Light fog'
+    case 12:
+      return 'Dense fog'
+    case 13:
+      return 'Freezing rain'
+    case 14:
+      return 'Thunderstorms'
+    case 15:
+      return 'Drizzle'
+    case 16:
+      return 'Sandstorm'
+  
+    default:
+      break;
+  }
+}
+
+// Mutation observer to check if cards have been added for animation
+onMounted(() => {
+  // Assuming your dynamically generated HTML is inserted into a container with id 'weather-container'
+  const targetNode = document.querySelector('.section__cards');
+
+  const config = { childList: true, subtree: false };
+
+  const callback = function(mutationsList, observer) {
+    for(const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        // Check if the expected elements are present
+        const expectedElements = document.querySelectorAll('.card__location');
+        if(expectedElements.length > 0) {
+          // Call your function here
+          if (targetNode.querySelector('.rain')) {
+            initRain();
+          }
+          
+          if (targetNode.querySelector('.snow')) {
+            initSnow();
+          }
+        }
+      }
+    }
+  };
+
+  const observer = new MutationObserver(callback);
+  observer.observe(targetNode, config);
+});
+
+const numberOfDroplets: number = 60;
+const numberOfSnowflakes: number = 30;
+
+interface DropletInput {
+  left: number;
+  delay: string;
+  opacity: string;
+}
+
+interface SnowflakeInput extends DropletInput {
+  size: number;
+  snowFallDuration: number;
+  snowDriftDuration: number;
+}
+
+function createDroplet(input: DropletInput): void {
+  const dropletContainer = document.querySelector('.droplet-container')!;
+  dropletContainer.insertAdjacentHTML('afterbegin', '<div class="droplet"></div>');
+  const droplet = dropletContainer.firstChild as HTMLElement;
+  droplet.style.left = `${input.left}%`;
+  droplet.style.animationDelay = `${input.delay}s`;
+  droplet.style.opacity = input.opacity;
+}
+
+function createSnowflake(input: SnowflakeInput): void {
+  const snowflakeContainer = document.querySelector('.snowflake-container')!;
+  snowflakeContainer.insertAdjacentHTML('afterbegin', '<div class="snowflake"></div>');
+  const snowflake = snowflakeContainer.firstChild as HTMLElement;
+  snowflake.style.left = `${input.left}%`;
+  snowflake.style.width = `${input.size}px`;
+  snowflake.style.height = `${input.size}px`;
+  snowflake.style.animationDelay = `${input.delay}s`;
+  snowflake.style.animationDuration = `${input.snowFallDuration}s, ${input.snowDriftDuration}s`;
+  snowflake.style.opacity = input.opacity;
+}
+
+function initRain() {
+  // Generate droplets
+  for (let i = 0; i < numberOfDroplets; i++) {
+    const left = parseInt(Math.random() * 100);
+    const delay = (Math.random() * 3).toFixed(3);
+    const opacity = (Math.random() * 0.5).toFixed(2);
+
+    createDroplet({ left, delay, opacity });
+  }
+}
+
+function initSnow() {
+  // Generate snowflakes
+  for (let i = 0; i < numberOfSnowflakes; i++) {
+    const left = parseInt(Math.random() * 100);
+    const size = Math.floor(Math.random() * 11 + 5);
+    const delay = (Math.random() * 10).toFixed(3);
+    const snowFallDuration = Math.floor(Math.random() * 5 + 10);
+    const snowDriftDuration = Math.floor(Math.random() * 4 + 4);
+    const opacity = (Math.random() * 0.7).toFixed(2);
+
+    createSnowflake({ left, size, delay, snowFallDuration, snowDriftDuration, opacity });
   }
 }
 
@@ -425,10 +570,20 @@ const openModal = () => {
   overflow: hidden;
 
   transition: height .5s ease-in-out;
+
+  &__info--current {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+
+    font-size: 1rem;
+  }
   
-  &__location-name {
+  &__location-info {
     position: absolute;
-    top: 80%;
+    top: 70%;
     left: 50%;
     transform: translateX(-50%);
 
@@ -450,7 +605,7 @@ const openModal = () => {
     transform: translateX(-50%) ;
 
     width: 80%;
-    max-height: 13rem;
+    max-height: 11rem;
 
     overflow-y: scroll;
 
@@ -469,12 +624,12 @@ const openModal = () => {
   &:hover {
     background-color: $c-blue;
 
-    .card__location-name {
+    .card__location-info {
       top: 2rem;
     }
 
     .card__content {
-      top: 6rem;
+      top: 7rem;
     }
 
     .background {
@@ -511,5 +666,17 @@ const openModal = () => {
       transition: opacity .5s ease-in-out;
     }
   }
+}
+
+.menu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  
+  width: 20px;
+  height: 20px;
+  
+  cursor: pointer;
 }
 </style>
