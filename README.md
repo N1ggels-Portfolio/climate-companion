@@ -47,16 +47,14 @@ pip3 install Flask flask_mysqldb
 python3 app.py
 ```
 
-5. Adjust authentication:
+5. Authentication:
 ```bash
-# inside ~/assets/ts/auth/auth.ts
-# credentials for meteomatics api
-const username = 'USERNAME';
-const password = 'PASSWORD';
-
-# inside ~/assets/ts/api/opencagedata.ts
-# api key from opencage
-const apiKey = 'API_KEY';
+# Environment Variables
+## create .env file in project root
+VITE_METEOMATICS_USERNAME=USERNAME
+VITE_METEOMATICS_PASSWORD=PASSWORD
+VITE_OPENCAGE_API_KEY=API_KEY
+## Replace USERNAME, PASSWORD, and API_KEY with actual values from you api accounts
 ```
 Weather: [Meteomatics API](https://www.meteomatics.com/en/sign-up-weather-api-test-account/#contact)
 
